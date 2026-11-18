@@ -7,7 +7,7 @@
 Entry for make.fun bounty **tiny-chess-01**: the strongest chess engine that
 fits in 4,096 bytes of Python.
 
-`main.py` (4,057 bytes) is a self-contained lzma-packed build of a
+`main.py` (4,002 bytes) is a self-contained lzma-packed build of a
 sunfish-class engine written from scratch for this bounty:
 
 - negamax + PVS, transposition table, quiescence search (captures,
@@ -37,14 +37,13 @@ Local practice grading (the bounty's own harness, three six-game trials):
 
 | Trial | Score | Elo |
 |---|---|---|
-| 0 | 4.0/6 | 1451 |
-| 1 | 4.5/6 | 1545 |
-| 2 | 3.0/6 | 1279 |
-| **Mean** | | **1425** |
+| 0 | 6.0/6 | 3000 (solver cap) |
+| 1 | 5.0/6 | 1654 |
+| 2 | 4.0/6 | 1451 |
+| **Pooled (18 games)** | 15.0/18 | **1654** |
 
-House baseline (sunfish-NNUE-4k) practice mean: 1365 — paired leads
-+87 / +94 / 0, mean lead +60. The 1154 entry floor was cleared on all
-three trials.
+House baseline (sunfish-NNUE-4k) practice mean: 1365 — the pooled lead
+is +289. The 1154 entry floor was cleared on all three trials.
 
 Determinism verified: re-running the same trial gave byte-identical game
 records (fixed node budget; no clock, no randomness).
@@ -61,7 +60,7 @@ over the same three trials scored mean 1364 and was reverted in favour of
 the 55,000-node build (mean 1425) shipped here.
 
 The shipped `main.py` is the lzma-packed build from the kit's `compress`
-command, packed from the readable 10,314-byte source.
+command, packed from the readable 9,697-byte source.
 
 ---
 
