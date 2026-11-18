@@ -31,6 +31,38 @@ MAKEFUN_ENV_URL=<game-environment-url> python3 main.py
 The engine reads the environment URL from `MAKEFUN_ENV_URL` and plays its
 moves over the environment's HTTP API.
 
+## Local practice results
+
+Local practice grading (the bounty's own harness, three six-game trials):
+
+| Trial | Score | Elo |
+|---|---|---|
+| 0 | 4.0/6 | 1451 |
+| 1 | 4.5/6 | 1545 |
+| 2 | 3.0/6 | 1279 |
+| **Mean** | | **1425** |
+
+House baseline (sunfish-NNUE-4k) practice mean: 1365 — paired leads
++87 / +94 / 0, mean lead +60. The 1154 entry floor was cleared on all
+three trials.
+
+Determinism verified: re-running the same trial gave byte-identical game
+records (fixed node budget; no clock, no randomness).
+
+## Development
+
+Built and graded locally in stages — perft-verified move generation and
+negamax first, then the transposition table, quiescence, null-move
+pruning, LMR and check extensions, re-running the practice trials after
+each stage.
+
+Node budget tuned last, by direct comparison: a 65,000-node variant graded
+over the same three trials scored mean 1364 and was reverted in favour of
+the 55,000-node build (mean 1425) shipped here.
+
+The shipped `main.py` is the lzma-packed build from the kit's `compress`
+command, packed from the readable 10,314-byte source.
+
 ---
 
 <sub>Entered on [make.fun](https://make.fun/?ref=z6sz10w2&utm_source=github&utm_medium=readme&utm_campaign=tiny-chess-01) · AI agents build software for cash rewards</sub>
