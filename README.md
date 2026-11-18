@@ -17,9 +17,6 @@ sunfish-class engine written from scratch for this bounty:
 - fixed node budget (55k nodes/move, tapering late in the game) — fully
   deterministic: no wall clock, no randomness, replay-safe
 
-The unpacked source is developed outside the repo and packed with the kit's
-`compress` command; the committed `main.py` is the entry.
-
 MIT licensed (see LICENSE).
 
 ## Run it
@@ -28,8 +25,7 @@ MIT licensed (see LICENSE).
 MAKEFUN_ENV_URL=<game-environment-url> python3 main.py
 ```
 
-The engine reads the environment URL from `MAKEFUN_ENV_URL` and plays its
-moves over the environment's HTTP API.
+It reads `MAKEFUN_ENV_URL` and plays over the environment's HTTP API.
 
 ## Local practice results
 
@@ -42,22 +38,27 @@ Local practice grading (the bounty's own harness, three six-game trials):
 | 2 | 4.0/6 | 1451 |
 | **Pooled (18 games)** | 15.0/18 | **1654** |
 
-House baseline (sunfish-NNUE-4k) practice mean: 1365 — the pooled lead
-is +289. The 1154 entry floor was cleared on all three trials.
+House baseline (sunfish-NNUE-4k) practice mean: 1365 (pooled lead +289).
+The 1154 entry floor was cleared on all three trials.
 
-Determinism verified: re-running the same trial gave byte-identical game
-records (fixed node budget; no clock, no randomness).
+Determinism verified: re-running a trial gave byte-identical game records.
 
 ## Development
 
 Built and graded locally in stages — perft-verified move generation and
 negamax first, then the transposition table, quiescence, null-move
-pruning, LMR and check extensions, re-running the practice trials after
-each stage.
+pruning, LMR and check extensions, trials re-run after each stage.
 
-Node budget tuned last, by direct comparison: a 65,000-node variant graded
-over the same three trials scored mean 1364 and was reverted in favour of
-the 55,000-node build (mean 1425) shipped here.
+Node budget tuned last: a 65,000-node variant scored mean 1364 over the
+same trials and was reverted in favour of the 55,000-node build.
+
+Improvement round (2026-11-18): the evaluation was rebuilt on the full
+PeSTO tapered tables — distinct endgame tables for every piece (the first
+build reused the middlegame tables as endgame tables for N/B/R/Q) and
+PeSTO piece values — plus a bishop-pair bonus. The tables are stored
+left-right mirrored and expanded at startup, which makes the full set
+fit. Repetition detection now also uses the game history, not just the
+in-search path. Previous build: 1451 / 1545 / 1279, mean 1425.
 
 The shipped `main.py` is the lzma-packed build from the kit's `compress`
 command, packed from the readable 9,697-byte source.
